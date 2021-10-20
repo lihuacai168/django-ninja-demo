@@ -23,11 +23,11 @@ from django.urls import path
 from ninja import NinjaAPI, File
 
 
-api = NinjaAPI()
+api_v1 = NinjaAPI(version='1.0.0')
 
-api.add_router('/employee/', employee_router)
+api_v1.add_router('/employee/', employee_router)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", api.urls),
+    path("api/", api_v1.urls),
 ]

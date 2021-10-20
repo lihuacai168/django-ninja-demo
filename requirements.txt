@@ -1,8 +1,8 @@
-asgiref==3.3.4
-dataclasses==0.8
-Django==3.2.3
-django-ninja==0.12.3
-pydantic==1.8.2
-pytz==2021.1
-sqlparse==0.4.1
-typing-extensions==3.10.0.0
+asgiref
+dataclasses
+Django
+django-ninja
+pydantic
+pytz
+sqlparse
+typing-extensions
