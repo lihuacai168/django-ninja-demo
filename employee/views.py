@@ -17,6 +17,12 @@ def create_employee(request, payload: EmployeeIn):
 
 @router.get("/employees/{employee_id}", response={200: EmployeeOut, 404: Message})
 def get_employee(request, employee_id: int):
+    """
+    - :param employee_id:
+    - :return:
+        - 200返回正常
+        - 404找不到对象
+    """
     employee = get_object_or_404(Employee, id=employee_id)
     return employee
 
