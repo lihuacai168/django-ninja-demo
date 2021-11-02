@@ -1,12 +1,22 @@
-from typing import List
-from ninja import Router
+from typing import List, Optional
+from ninja import Router, Query, Schema
 from django.shortcuts import get_object_or_404
+from pydantic.fields import Field
+from pydantic.types import conint
+
+
 
 from common.schema import Message
 from employee.models import Employee
 from employee.schemas import EmployeeIn, EmployeeOut
 
 router = Router(tags=['employees'])
+
+
+class Filters(Schema):
+    first_name__contains: str = Field(None, alias="fisrt_name")
+    last_name__contains: str = Field(None, alias="last_name")
+    department_id: Optional[conint(ge=0)]
 
 
 @router.post("/employees")
@@ -28,8 +38,9 @@ def get_employee(request, employee_id: int):
 
 
 @router.get("/employees", response=List[EmployeeOut])
-def list_employees(request):
-    qs = Employee.objects.all()
+def list_employees(request, filters: Filters = Query(...)):
+    qs = Employee.objects.filter(**filters.dict(exclude_none=True))
+    print(qs.query)
     return qs
 
 
