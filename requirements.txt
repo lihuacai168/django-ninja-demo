@@ -6,3 +6,6 @@ pydantic
 pytz
 sqlparse
 typing-extensions
+
+django-log-request-id
+colorlog==4.0.2

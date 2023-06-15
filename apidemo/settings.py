@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'log_request_id.middleware.RequestIDMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -119,3 +120,84 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# log_id setting
+LOG_REQUEST_ID_HEADER = "HTTP_X_REQUEST_ID"
+GENERATE_REQUEST_ID_IF_NOT_IN_HEADER = True
+REQUEST_ID_RESPONSE_HEADER = "RESPONSE_HEADER_NAME"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": True,
+    "formatters": {
+        "standard": {
+            "format": "%(levelname)-2s [%(asctime)s] [%(request_id)s] %(name)s: %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+        "color": {
+            "()": "colorlog.ColoredFormatter",
+            "format": "%(green)s%(asctime)s [%(request_id)s] %(name)s %(log_color)s%(levelname)s [pid:%(process)d] "
+            "[%(filename)s->%(funcName)s:%(lineno)s] %(cyan)s%(message)s",
+            "log_colors": {
+                "DEBUG": "black",
+                "INFO": "white",
+                "WARNING": "yellow",
+                "ERROR": "red",
+                "CRITICAL": "bold_red",
+            },
+        }
+        # 日志格式
+    },
+    "filters": {
+        "request_id": {"()": "log_request_id.filters.RequestIDFilter"},
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",  # 过滤器，只有当setting的DEBUG = True时生效
+        },
+    },
+    "handlers": {
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
+            "include_html": True,
+        },
+        "default": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            # 'filename': os.path.join(BASE_DIR, 'logs/../../logs/debug.log'),
+            "filename": os.path.join(BASE_DIR, "logs/info.log"),
+            "maxBytes": 1024 * 1024 * 50,
+            "backupCount": 5,
+            "formatter": "color",
+            "filters": ["request_id"],
+        },
+        "error": {
+            "level": "ERROR",
+            "class": "logging.handlers.RotatingFileHandler",
+            # 'filename': os.path.join(BASE_DIR, 'logs/../../logs/debug.log'),
+            "filename": os.path.join(BASE_DIR, "logs/error.log"),
+            "maxBytes": 1024 * 1024 * 50,
+            "backupCount": 5,
+            "formatter": "color",
+            "filters": ["request_id"],
+        },
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "color",
+            "filters": ["request_id"],
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["default", "console", "error"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "employee": {
+            "handlers": ["default", "console", "error"],
+            "level": "INFO",
+            "propagate": True,
+        },
+
+    },
+}

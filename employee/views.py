@@ -1,16 +1,18 @@
+import logging
 from typing import List, Optional
-from ninja import Router, Query, Schema
+
 from django.shortcuts import get_object_or_404
+from ninja import Query, Router, Schema
 from pydantic.fields import Field
 from pydantic.types import conint
-
-
 
 from common.schema import Message
 from employee.models import Employee
 from employee.schemas import EmployeeIn, EmployeeOut
 
-router = Router(tags=['employees'])
+router = Router(tags=["employees"])
+
+logger = logging.getLogger(__name__)
 
 
 class Filters(Schema):
@@ -21,6 +23,7 @@ class Filters(Schema):
 
 @router.post("/employees")
 def create_employee(request, payload: EmployeeIn):
+    logger.info(f"create employee, input: {payload.dict()}")
     employee = Employee.objects.create(**payload.dict())
     return {"id": employee.id}
 
