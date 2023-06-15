@@ -1,11 +1,13 @@
 asgiref
 dataclasses
-Django
+Django~=4.2.2
 django-ninja
-pydantic
+pydantic~=1.10.9
 pytz
 sqlparse
 typing-extensions
 
 django-log-request-id
 colorlog==4.0.2
+PyMySQL~=1.0.3
+django-redis

@@ -1,6 +1,10 @@
 from datetime import date
+from typing import Optional
+
 from ninja import Schema
-from common.schema import BaseSchemaOut
+from pydantic import Field, conint
+
+from core.schemas import PageFilter
 
 
 class EmployeeIn(Schema):
@@ -13,3 +17,8 @@ class EmployeeIn(Schema):
 class EmployeeOut(EmployeeIn):
     id: int
 
+
+class EmployeeFilters(PageFilter):
+    first_name__contains: str = Field(None, alias="fisrt_name")
+    last_name__contains: str = Field(None, alias="last_name")
+    department_id: Optional[conint(ge=0)]

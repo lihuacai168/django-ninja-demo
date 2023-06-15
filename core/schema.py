@@ -1,4 +1,4 @@
-from typing import Optional, Any
+from typing import Any, Optional
 
 from ninja import Schema
 from pydantic import conint
@@ -12,3 +12,5 @@ class BaseSchemaOut(Schema):
 
 class Message(Schema):
     details: str
+
+

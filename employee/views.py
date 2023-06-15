@@ -1,14 +1,13 @@
 import logging
-from typing import List, Optional
+from typing import Optional, Union
 
-from django.shortcuts import get_object_or_404
 from ninja import Query, Router, Schema
 from pydantic.fields import Field
 from pydantic.types import conint
 
-from common.schema import Message
-from employee.models import Employee
-from employee.schemas import EmployeeIn, EmployeeOut
+from core.schemas import DictId, PageSchema, StandResponse
+from employee.employee_service_impl import employee_service_impl
+from employee.schemas import EmployeeFilters, EmployeeIn, EmployeeOut
 
 router = Router(tags=["employees"])
 
@@ -21,43 +20,30 @@ class Filters(Schema):
     department_id: Optional[conint(ge=0)]
 
 
-@router.post("/employees")
+@router.post("/employees", response=StandResponse[DictId])
 def create_employee(request, payload: EmployeeIn):
-    logger.info(f"create employee, input: {payload.dict()}")
-    employee = Employee.objects.create(**payload.dict())
-    return {"id": employee.id}
+    return employee_service_impl.create_obj(payload, "huacai")
 
 
-@router.get("/employees/{employee_id}", response={200: EmployeeOut, 404: Message})
+@router.get(
+    "/employees/{employee_id}", response=StandResponse[Union[EmployeeOut, None]]
+)
 def get_employee(request, employee_id: int):
-    """
-    - :param employee_id:
-    - :return:
-        - 200返回正常
-        - 404找不到对象
-    """
-    employee = get_object_or_404(Employee, id=employee_id)
-    return employee
+    return employee_service_impl.get_obj(employee_id)
 
 
-@router.get("/employees", response=List[EmployeeOut])
-def list_employees(request, filters: Filters = Query(...)):
-    qs = Employee.objects.filter(**filters.dict(exclude_none=True))
-    print(qs.query)
-    return qs
+@router.get("/employees", response=StandResponse[PageSchema[EmployeeOut]])
+def list_employees(request, filters: EmployeeFilters = Query(...)):
+    objs = employee_service_impl.list_obj(filters, EmployeeOut)
+    return StandResponse(data=objs)
 
 
-@router.put("/employees/{employee_id}")
+@router.put("/employees/{employee_id}", response=StandResponse[Union[DictId, dict]])
 def update_employee(request, employee_id: int, payload: EmployeeIn):
-    employee = get_object_or_404(Employee, id=employee_id)
-    for attr, value in payload.dict().items():
-        setattr(employee, attr, value)
-    employee.save()
-    return {"success": True}
+    payload.department_id = employee_id
+    return employee_service_impl.update_obj(employee_id, payload, "huacai")
 
 
-@router.delete("/employees/{employee_id}")
+@router.delete("/employees/{employee_id}", response=StandResponse[bool])
 def delete_employee(request, employee_id: int):
-    employee = get_object_or_404(Employee, id=employee_id)
-    employee.delete()
-    return {"success": True}
+    return employee_service_impl.delete_obj(employee_id)
