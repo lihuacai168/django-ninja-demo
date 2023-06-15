@@ -22,6 +22,7 @@ class Filters(Schema):
 
 @router.post("/employees", response=StandResponse[DictId])
 def create_employee(request, payload: EmployeeIn):
+    logger.info(f"input: payload={payload.dict()}")
     return employee_service_impl.create_obj(payload, "huacai")
 
 
@@ -34,6 +35,7 @@ def get_employee(request, employee_id: int):
 
 @router.get("/employees", response=StandResponse[PageSchema[EmployeeOut]])
 def list_employees(request, filters: EmployeeFilters = Query(...)):
+    logger.info(f"input: filters={filters.dict()}")
     objs = employee_service_impl.list_obj(filters, EmployeeOut)
     return StandResponse(data=objs)
 
@@ -41,6 +43,7 @@ def list_employees(request, filters: EmployeeFilters = Query(...)):
 @router.put("/employees/{employee_id}", response=StandResponse[Union[DictId, dict]])
 def update_employee(request, employee_id: int, payload: EmployeeIn):
     payload.department_id = employee_id
+    logger.info(f"input: payload={payload.dict()}")
     return employee_service_impl.update_obj(employee_id, payload, "huacai")
 
 

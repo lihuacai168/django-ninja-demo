@@ -11,3 +11,5 @@ django-log-request-id
 colorlog==4.0.2
 PyMySQL~=1.0.3
 django-redis
+gevent==22.10.2
+gunicorn==20.1.0

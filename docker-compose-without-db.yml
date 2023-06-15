@@ -1,0 +1,29 @@
+version: '3.8'
+
+x-env: &env
+  # db
+  MYSQL_DATABASE: ${MYSQL_DATABASE}
+  MYSQL_USER: ${MYSQL_USER}
+  MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  MYSQL_HOST: ${MYSQL_HOST:-db}
+  MYSQL_PORT: ${MYSQL_PORT:-3306}
+
+services:
+  app:
+    image: apidemo:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+        DEBIAN_REPO: ${DEBIAN_REPO:-mirrors.aliyun.com}
+    environment:
+      <<: *env
+    ports:
+      - "${DJANGO_API_PORT:-8000}:8000"
+    entrypoint: /app/start.sh
+    command: "app"
+    restart: always
+
+
+
