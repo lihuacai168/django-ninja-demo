@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'core.middleware.ResponseDataRequestIDMiddleware',
     'log_request_id.middleware.RequestIDMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -124,7 +125,7 @@ STATIC_URL = '/static/'
 # log_id setting
 LOG_REQUEST_ID_HEADER = "HTTP_X_REQUEST_ID"
 GENERATE_REQUEST_ID_IF_NOT_IN_HEADER = True
-REQUEST_ID_RESPONSE_HEADER = "RESPONSE_HEADER_NAME"
+REQUEST_ID_RESPONSE_HEADER = "TRACE_ID"
 
 LOGGING = {
     "version": 1,
