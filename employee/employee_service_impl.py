@@ -12,7 +12,7 @@ from employee.models import Employee
 
 class EmployeeServiceImpl(GenericCURDSoftDelete):
     """
-    员工服务实现
+    Employee CURD service
     """
 
     def __init__(self):

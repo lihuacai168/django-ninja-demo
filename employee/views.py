@@ -1,4 +1,4 @@
-"""员工curd view"""
+"""employee curd view"""
 import logging
 from typing import Optional, Union
 
