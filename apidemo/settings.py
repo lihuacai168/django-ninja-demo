@@ -198,6 +198,11 @@ LOGGING = {
             "level": "INFO",
             "propagate": True,
         },
+        "utils": {
+            "handlers": ["default", "console", "error"],
+            "level": "INFO",
+            "propagate": True,
+        },
 
     },
 }
