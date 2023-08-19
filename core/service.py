@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 
 from core import cache, response
 from core.model import CoreModelSoftDelete
-from core.schemas import DictId, PageFilter, PageSchema, StandResponse, ErrorCode
+from core.schemas import DictId, PageFilter, PageSchema, StandResponse
 from utils import model_opertion
 from utils.model_opertion import GenericPayload
 
@@ -74,7 +74,7 @@ class GenericCURD(BaseCURD):
 
     def list_obj(self, page_filter: PageFilter, page_schema: PageSchema) -> PageSchema:
         qs = self.model.objects.filter(**page_filter.dict())
-        return response.get_page(qs=qs, f=page_filter, t=page_schema)
+        return response.get_page(queryset=qs, pager_filter=page_filter, generic_result_type=page_schema)
 
     def update_obj(
         self, id: int, payload, user_email
@@ -123,31 +123,31 @@ class GenericCURDSoftDelete(BaseCURD):
             return None
         return obj
 
-    def get_obj(self, id: int) -> StandResponse:
+    def get_obj(self, id: int) -> StandResponse[Union[Model, None]]:
         return StandResponse(data=self._get_obj_by_id(id=id))
 
     def list_obj(self, page_filter: PageFilter, page_schema: PageSchema) -> PageSchema:
         qs = self.model.objects.filter(**page_filter.dict(), is_deleted=0)
-        return response.get_page(qs=qs, f=page_filter, t=page_schema)
+        return response.get_page(queryset=qs, pager_filter=page_filter, generic_result_type=page_schema)
 
     def update_obj(
         self, id: int, payload: GenericPayload, user_email: str
-    ) -> StandResponse[Union[DictId, dict]]:
+    ) -> StandResponse[Union[DictId, None]]:
         obj = self._get_obj_by_id(id=id)
         if obj is None:
-            return StandResponse[dict](err_msg=f"{id=} not exist", err_code=ErrorCode.RecordNotFound, data={})
+            return StandResponse[dict](message=f"{id=} not exist", success=False, data={})
         return model_opertion.update_by_obj(
             updater=user_email, obj=obj, **payload.dict()
         )
 
-    def partial_update(self, id: int, user_email: str, **fields_kv):
+    def partial_update(self, id: int, user_email: str, **fields_kv) -> StandResponse[Union[DictId, None]]:
         obj = self._get_obj_by_id(id=id)
         return model_opertion.update_by_obj(updater=user_email, obj=obj, **fields_kv)
 
     def delete_obj(self, id: int) -> StandResponse[bool]:
         obj = self._get_obj_by_id(id=id)
         if obj is None:
-            return StandResponse[bool](data=False, err_msg=f"{id=} not exist")
+            return StandResponse[bool](data=False, message=f"{id=} not exist")
         obj.is_deleted = str(uuid.uuid1())
         obj.save()
         return StandResponse[bool](data=True)

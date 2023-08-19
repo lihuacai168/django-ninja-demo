@@ -1,3 +1,4 @@
+"""员工curd view"""
 import logging
 from typing import Optional, Union
 
@@ -20,7 +21,7 @@ class Filters(Schema):
     department_id: Optional[conint(ge=0)]
 
 
-@router.post("/employees", response=StandResponse[DictId])
+@router.post("/employees", response=StandResponse[Union[DictId, None]])
 def create_employee(request, payload: EmployeeIn):
     logger.info(f"input: payload={payload.dict()}")
     return employee_service_impl.create_obj(payload, "huacai")
@@ -40,7 +41,7 @@ def list_employees(request, filters: EmployeeFilters = Query(...)):
     return StandResponse(data=objs)
 
 
-@router.put("/employees/{employee_id}", response=StandResponse[Union[DictId, dict]])
+@router.put("/employees/{employee_id}", response=StandResponse[Union[DictId, None]])
 def update_employee(request, employee_id: int, payload: EmployeeIn):
     payload.department_id = employee_id
     logger.info(f"input: payload={payload.dict()}")
