@@ -123,7 +123,7 @@ class GenericCURDSoftDelete(BaseCURD):
             return None
         return obj
 
-    def get_obj(self, id: int) -> StandResponse[Union[Model, None]]:
+    def get_obj(self, id: int) -> StandResponse:
         return StandResponse(data=self._get_obj_by_id(id=id))
 
     def list_obj(self, page_filter: PageFilter, page_schema: PageSchema) -> PageSchema:
