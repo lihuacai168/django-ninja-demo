@@ -19,6 +19,6 @@ class EmployeeOut(EmployeeIn):
 
 
 class EmployeeFilters(PageFilter):
-    first_name__contains: str = Field(None, alias="fisrt_name")
+    first_name__contains: str = Field(None, alias="first_name")
     last_name__contains: str = Field(None, alias="last_name")
     department_id: Optional[conint(ge=0)]

@@ -3,6 +3,7 @@ import logging
 from typing import Optional, Union
 
 from ninja import Query, Router, Schema
+from ninja_jwt.authentication import JWTAuth
 from pydantic.fields import Field
 from pydantic.types import conint
 
@@ -10,13 +11,13 @@ from core.schemas import DictId, PageSchema, StandResponse
 from employee.employee_service_impl import employee_service_impl
 from employee.schemas import EmployeeFilters, EmployeeIn, EmployeeOut
 
-router = Router(tags=["employees"])
+router = Router(tags=["employees"], auth=JWTAuth())
 
 logger = logging.getLogger(__name__)
 
 
 class Filters(Schema):
-    first_name__contains: str = Field(None, alias="fisrt_name")
+    first_name__contains: str = Field(None, alias="first_name")
     last_name__contains: str = Field(None, alias="last_name")
     department_id: Optional[conint(ge=0)]
 

@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
+from ninja_jwt.routers.obtain import obtain_pair_router
 
 from employee.views import router as employee_router
 
@@ -26,6 +26,8 @@ from ninja import NinjaAPI, File
 api_v1 = NinjaAPI(version='1.0.0')
 
 api_v1.add_router('/employee/', employee_router)
+api_v1.add_router('/token', tags=['Auth'], router=obtain_pair_router)
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
