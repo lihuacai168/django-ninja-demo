@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ninja import File, NinjaAPI
+from ninja.errors import AuthenticationError
 from ninja_extra import exceptions as extra_exceptions
 from ninja_jwt.routers.obtain import obtain_pair_router
 
@@ -28,7 +29,6 @@ api_v1.add_router("/token", tags=["Auth"], router=obtain_pair_router)
 
 
 def obtain_token_exception_handler(request, exc):
-    headers = {}
 
     if isinstance(exc, extra_exceptions.APIException):
         data = {
@@ -40,13 +40,22 @@ def obtain_token_exception_handler(request, exc):
         data = {"message": exc.detail, "success": False, "data": None}
 
     response = api_v1.create_response(request, data, status=exc.status_code)
-    for k, v in headers.items():
-        response.setdefault(k, v)
 
     return response
 
 
+def auth_error_exception_handler(request, exc):
+    data = {
+        "message": "AuthenticationError",
+        "success": False,
+        "data": None,
+    }
+    response = api_v1.create_response(request, data, status=401)
+    return response
+
+
 api_v1.exception_handler(extra_exceptions.APIException)(obtain_token_exception_handler)
+api_v1.exception_handler(AuthenticationError)(auth_error_exception_handler)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

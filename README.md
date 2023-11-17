@@ -1,6 +1,6 @@
 # Features
 - Easy and fast CURD
-- Stand response
+- Stand format response
 - Log and response trace_id
 ![easy_and_fast_crud](assets/easy_and_fast_crud.png)
 ![stand_response](assets/stand_response.png)
@@ -57,3 +57,12 @@ python manage.py runserver localhost:8000
 
 ## Open api docs [open in browser](http://localhost:8000/api/docs)
 
+
+## Obtain access token
+![img.png](assets/obtain_token_request.png)
+![img_1.png](assets/obtain_token_response.png)
+
+
+## Authorize and request API
+![img.png](assets/authorize.png)
+![img_1.png](assets/request_api.png)
