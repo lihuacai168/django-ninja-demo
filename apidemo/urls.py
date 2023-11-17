@@ -13,21 +13,40 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.contrib import admin
+from django.urls import path
+from ninja import File, NinjaAPI
+from ninja_extra import exceptions as extra_exceptions
 from ninja_jwt.routers.obtain import obtain_pair_router
 
 from employee.views import router as employee_router
 
+api_v1 = NinjaAPI(version="1.0.0")
 
-from django.contrib import admin
-from django.urls import path
-from ninja import NinjaAPI, File
+api_v1.add_router("/employee/", employee_router)
+api_v1.add_router("/token", tags=["Auth"], router=obtain_pair_router)
 
 
-api_v1 = NinjaAPI(version='1.0.0')
+def obtain_token_exception_handler(request, exc):
+    headers = {}
 
-api_v1.add_router('/employee/', employee_router)
-api_v1.add_router('/token', tags=['Auth'], router=obtain_pair_router)
+    if isinstance(exc, extra_exceptions.APIException):
+        data = {
+            "message": exc.detail.get("detail", str(exc)),
+            "success": False,
+            "data": None,
+        }
+    else:
+        data = {"message": exc.detail, "success": False, "data": None}
 
+    response = api_v1.create_response(request, data, status=exc.status_code)
+    for k, v in headers.items():
+        response.setdefault(k, v)
+
+    return response
+
+
+api_v1.exception_handler(extra_exceptions.APIException)(obtain_token_exception_handler)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
