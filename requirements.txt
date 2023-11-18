@@ -13,3 +13,4 @@ PyMySQL~=1.0.3
 django-redis
 gevent==22.10.2
 gunicorn==20.1.0
+django-ninja-jwt==5.2.7
