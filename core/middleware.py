@@ -25,7 +25,9 @@ class ResponseDataRequestIDMiddleware:
             try:
                 data: dict = json.loads(response.content)
                 _, data["trace_id"] = response.headers._store.get("trace_id")
-                response = JsonResponse(data)
+                _response = JsonResponse(data)
+                _response.status_code = response.status_code
+                response = _response
 
             except Exception:
                 ...
