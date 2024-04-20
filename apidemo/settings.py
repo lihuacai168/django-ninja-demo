@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'employee',
     'ninja_jwt',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -258,3 +259,7 @@ NINJA_JWT = {
 AUTHENTICATION_BACKENDS = [
     'core.auth.CustomAuthBackend',
 ]
+
+
+# celery broker
+broker_url = "redis://127.0.0.1:6379/0"
