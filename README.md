@@ -66,3 +66,28 @@ python manage.py runserver localhost:8000
 ## Authorize and request API
 ![img.png](assets/authorize.png)
 ![img_1.png](assets/request_api.png)
+
+# Celery
+## Config celery broker
+```python
+# setting.py
+broker_url = "redis://127.0.0.1:6379/0"
+```
+## Run celery worker
+```shell
+# start celery worker, using command line
+python -m celery -A apidemo.celery_config worker -l INFO 
+```
+
+## PyCharm run_celery_worker_configuration
+![pycharm_run_celery_worker_configuration](assets/celery_worker.png)
+
+
+## Run celery beat
+```shell
+# start celery beat, using command line
+python -m celery -A apidemo.celery_config beat -l DEBUG 
+```
+
+## PyCharm run_celery_beat_configuration
+![pycharm_run_celery_beat_configuration](assets/celery_beat.png)
