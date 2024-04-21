@@ -1,5 +1,5 @@
-[![Github Actions](https://github.com/httprunner/httprunner/actions/workflows/unittest.yml/badge.svg)](https://github.com/lihuacai168/django-ninja-demo/actions)
-[![codecov](https://codecov.io/gh/httprunner/httprunner/branch/master/graph/badge.svg)](https://app.codecov.io/gh/lihuacai168/django-ninja-demo)
+[![Github Actions](https://github.com/lihuacai168/django-ninja-demo/actions/workflows/django-test.yml/badge.svg)](https://github.com/lihuacai168/django-ninja-demo/actions)
+[![codecov](https://codecov.io/gh/lihuacai168/django-ninja-demo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/lihuacai168/django-ninja-demo)
 # Key Features
 - 🛡️ **High Coverage: Rigorous unit tests for robust codebase assurance.**
 - 😊 **Fast CRUD Router: Quick and easy create, read, update, and delete operations.**
