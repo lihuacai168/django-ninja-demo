@@ -35,7 +35,7 @@ class TokenTestClient(TestClient):
         return self._call(func, request, kwargs)  # type: ignore
 
 
-class HelloTest(TestCase):
+class FastCrudRouterTest(TestCase):
     def setUp(self):
         self.employee_in = EmployeeIn(
             first_name="John",
@@ -75,7 +75,7 @@ class HelloTest(TestCase):
         self.assertEqual(response.json()["data"]["id"], 2)
 
     def test_list_obj(self):
-        response = self.token_client.get("/employees")
+        response = self.token_client.get("/employees?page_index=-1")
         self.assertEqual(response.status_code, 200)
         # Check if response contains list of employees
         self.assertIsInstance(response.json()["data"]["details"], list)
@@ -100,6 +100,12 @@ class HelloTest(TestCase):
             update_data_response.json()["data"]["first_name"], update_data["first_name"]
         )
 
+        # no exist id
+        response = self.token_client.put("/employees/2", json=update_data).json()
+        self.assertEqual(response["success"], False)
+        #
+
+
     def test_partial_update_obj(self):
         partial_update_data = {"first_name": "Partially Updated"}
         response = self.token_client.patch("/employees/1", json=partial_update_data)
@@ -115,8 +121,13 @@ class HelloTest(TestCase):
         )
 
     def test_delete_obj(self):
-        response = self.token_client.delete("/employees/1")
-        self.assertEqual(response.status_code, 200)
+        response1 = self.token_client.delete("/employees/1").json()
+        self.assertEqual(response1["success"], True)
+
         # Check if object does not exist anymore
         with self.assertRaises(ObjectDoesNotExist):
             Employee.objects.get(pk=1, is_deleted=False)
+
+        response2 = self.token_client.delete("/employees/1").json()
+        self.assertEqual(response2["success"], False)
+

@@ -29,7 +29,7 @@ class ResponseDataRequestIDMiddleware:
                 _response.status_code = response.status_code
                 response = _response
 
-            except Exception:
+            except Exception:  # pragma: no cover
                 ...
 
         return response

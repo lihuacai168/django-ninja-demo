@@ -1,0 +1,11 @@
+[run]
+omit =
+    */migrations/*
+    */tests/*
+    apidemo/asgi.py
+    apidemo/settings_dev.py
+    apidemo/settings_docker.py
+    apidemo/wsgi.py
+    apidemo/wsgi_docker.py
+    core/cache.py
+    apidemo/celery_config.py
