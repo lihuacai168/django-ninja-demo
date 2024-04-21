@@ -30,10 +30,11 @@ jobs:
       - name: Generate coverage xml report
         run: coverage xml
       - name: Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4.0.1
         with:
+          slug: lihuacai168/django-ninja-demo
           # User defined upload name. Visible in Codecov UI
-          name: django-ninja
+          name: django-ninja-demo
           # Repository upload token - get it from codecov.io
           token: ${{ secrets.CODECOV_TOKEN }}
           # Path to coverage file to upload
