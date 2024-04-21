@@ -31,34 +31,3 @@ router = CRUDRouter(
     tags=["employees"],
     auth=JWTAuth()
 )
-
-# @router.post("/employees", response=StandResponse[Union[DictId, None]])
-# def create_employee(request, payload: EmployeeIn):
-#     logger.info(f"input: payload={payload.dict()}")
-#     return employee_service_impl.create_obj(payload, "huacai")
-#
-#
-# @router.get(
-#     "/employees/{employee_id}", response=StandResponse[Union[EmployeeOut, None]]
-# )
-# def get_employee(request, employee_id: int):
-#     return employee_service_impl.get_obj(employee_id)
-#
-#
-# @router.get("/employees", response=StandResponse[PageSchema[EmployeeOut]])
-# def list_employees(request, filters: EmployeeFilters = Query(...)):
-#     logger.info(f"input: filters={filters.dict()}")
-#     objs = employee_service_impl.list_obj(filters, EmployeeOut)
-#     return StandResponse(data=objs)
-#
-#
-# @router.put("/employees/{employee_id}", response=StandResponse[Union[DictId, None]])
-# def update_employee(request, employee_id: int, payload: EmployeeIn):
-#     payload.department_id = employee_id
-#     logger.info(f"input: payload={payload.dict()}")
-#     return employee_service_impl.update_obj(employee_id, payload, "huacai")
-#
-#
-# @router.delete("/employees/{employee_id}", response=StandResponse[bool])
-# def delete_employee(request, employee_id: int):
-#     return employee_service_impl.delete_obj(employee_id)

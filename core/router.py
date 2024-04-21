@@ -33,7 +33,7 @@ class CRUDRouter(Router):
         @self.post(self.path, response=StandResponse[Union[DictId, None]])
         def create_obj(request, payload: self.in_schema):
             return self.service_impl.create_obj(
-                payload, request.user.email or request.user.username
+                payload, request.user.username
             )
 
         # get an obj
@@ -57,7 +57,7 @@ class CRUDRouter(Router):
         )
         def update_obj(request, id: int, payload: self.in_schema):
             return self.service_impl.update_obj(
-                id, payload, request.user.email or request.user.username
+                id, payload, request.user.username
             )
 
         # partial update obj
@@ -68,7 +68,7 @@ class CRUDRouter(Router):
         )
         def partial_update_obj(request, id: int, payload: dict = Body(...)):
             return self.service_impl.partial_update(
-                id, request.user.email or request.user.username, **payload
+                id, request.user.username, **payload
             )
 
         # delete an obj
