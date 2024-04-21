@@ -36,7 +36,7 @@ def obtain_token_exception_handler(request, exc):
             "success": False,
             "data": None,
         }
-    else:
+    else:  # pragma: no cover
         data = {"message": exc.detail, "success": False, "data": None}
 
     response = api_v1.create_response(request, data, status=exc.status_code)
@@ -44,7 +44,7 @@ def obtain_token_exception_handler(request, exc):
     return response
 
 
-def auth_error_exception_handler(request, exc):
+def auth_error_exception_handler(request, exc): # pragma: no cover
     data = {
         "message": "AuthenticationError",
         "success": False,

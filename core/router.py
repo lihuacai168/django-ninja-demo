@@ -52,7 +52,7 @@ class CRUDRouter(Router):
         # full update obj
         @self.put(
             f"{self.path}/{{id}}",
-            response=StandResponse[Union[DictId, None]],
+            response=StandResponse[Union[DictId, dict]],
             description="full obj update",
         )
         def update_obj(request, id: int, payload: self.in_schema):

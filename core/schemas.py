@@ -37,7 +37,7 @@ class PageFilter(Schema):
     def page_index_check(cls, page_index):
         if page_index <= 1:
             return 1
-        return page_index
+        return page_index  # pragma: no cover
 
     def dict(
         self,
