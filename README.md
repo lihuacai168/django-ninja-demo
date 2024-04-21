@@ -1,8 +1,11 @@
-# Features
-- Easy and fast CURD
-- Stand format response
-- Log and response trace_id
-![easy_and_fast_crud](assets/easy_and_fast_crud.png)
+[![Github Actions](https://github.com/httprunner/httprunner/actions/workflows/unittest.yml/badge.svg)](https://github.com/lihuacai168/django-ninja-demo/actions)
+[![codecov](https://codecov.io/gh/httprunner/httprunner/branch/master/graph/badge.svg)](https://app.codecov.io/gh/lihuacai168/django-ninja-demo)
+# Key Features
+- 🛡️ **High Coverage: Rigorous unit tests for robust codebase assurance.**
+- 😊 **Fast CRUD Router: Quick and easy create, read, update, and delete operations.**
+- ✅ **Uniform API: Consistent responses throughout the service.**
+- 🔍 **Trace IDs:  Simplified issue tracking with trace IDs in logs**
+![fast_curd](assets/fast_curd.png)
 ![stand_response](assets/stand_response.png)
 ![response_trace_id](assets/response_trace_id.png)
 ![log_trace_id](assets/log_trace_id.png)
