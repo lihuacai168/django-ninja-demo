@@ -1,5 +1,7 @@
 [![Github Actions](https://github.com/lihuacai168/django-ninja-demo/actions/workflows/django-test.yml/badge.svg)](https://github.com/lihuacai168/django-ninja-demo/actions)
 [![codecov](https://codecov.io/gh/lihuacai168/django-ninja-demo/branch/main/graph/badge.svg)](https://app.codecov.io/gh/lihuacai168/django-ninja-demo)
+![Dynamic YAML Badge](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Flihuacai168%2Fdjango-ninja-demo%2Fmain%2F.github%2Fworkflows%2Fdjango-test.yml&query=%24.jobs.build.strategy.matrix%5B'python-version'%5D&style=flat-square&logo=python&logoColor=blue&label=Python&color=yellow)
+
 # Key Features
 - 🛡️ **High Coverage: Rigorous unit tests for robust codebase assurance.**
 - 😊 **Fast CRUD Router: Quick and easy create, read, update, and delete operations.**
