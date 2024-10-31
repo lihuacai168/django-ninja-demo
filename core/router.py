@@ -1,6 +1,7 @@
 from typing import Any, List, Optional, Type, TypeVar, Union
 
-from core.schemas import DictId, PageFilter, PageSchema, StandResponse
+
+from core.schemas import DictId, PageFilter, PageSchema, StandResponse, OptionalDictResponseType
 from core.service import GenericCURD
 from ninja import Body, Query, Router, Schema
 from ninja.constants import NOT_SET_TYPE
@@ -41,18 +42,19 @@ class CRUDRouter(Router):
             f"{self.path}/{{id}}", response=StandResponse[Union[self.out_schema, None]]
         )
         def get_obj(request, id: int):
-            return self.service_impl.get_obj(id)
+            obj = self.service_impl.get_obj(id)
+            return StandResponse[Union[self.out_schema, None]](data=obj.data)
 
         # get a list of objs
         @self.get(self.path, response=StandResponse[PageSchema[self.out_schema]])
         def list_obj(request, filters: self.filters_class = Query(...)):
             objs = self.service_impl.list_obj(filters, self.out_schema)
-            return StandResponse(data=objs)
+            return StandResponse[PageSchema[self.out_schema]](data=objs)
 
         # full update obj
         @self.put(
             f"{self.path}/{{id}}",
-            response=StandResponse[Union[DictId, dict]],
+            response=OptionalDictResponseType,
             description="full obj update",
         )
         def update_obj(request, id: int, payload: self.in_schema):
@@ -63,7 +65,7 @@ class CRUDRouter(Router):
         # partial update obj
         @self.patch(
             f"{self.path}/{{id}}",
-            response=StandResponse[Union[DictId, None]],
+            response=OptionalDictResponseType,
             description="partial obj update",
         )
         def partial_update_obj(request, id: int, payload: dict = Body(...)):

@@ -57,9 +57,11 @@ class FastCrudRouterTest(TestCase):
         response = self.token_client.get("/employees/1")
 
         self.assertEqual(response.status_code, 200)
-        self.assertDictContainsSubset(
+        resp: dict= response.json()["data"]
+        resp.pop('id')
+        self.assertDictEqual(
             self.employee_in.dict(),
-            response.json()["data"],
+            resp,
             f"query input obj: {self.employee_in}",
         )
 

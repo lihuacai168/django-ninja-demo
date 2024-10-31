@@ -11,7 +11,7 @@ class EmployeeIn(Schema):
     first_name: str
     last_name: str
     department_id: int = None
-    birthdate: date = None
+    birthdate: Optional[date] = None
 
 
 class EmployeeOut(EmployeeIn):
@@ -21,4 +21,4 @@ class EmployeeOut(EmployeeIn):
 class EmployeeFilters(PageFilter):
     first_name__contains: str = Field(None, alias="first_name")
     last_name__contains: str = Field(None, alias="last_name")
-    department_id: Optional[conint(ge=0)]
+    department_id: Optional[conint(ge=0)] = None
