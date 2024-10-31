@@ -35,7 +35,7 @@ class AuthTokenTestCase(TestCase):
             data={"refresh": response_data["data"]["refresh"]},
             content_type="application/json",
         ).json()
-        self.assertEqual(response['data']['refresh'], response_data['data']['refresh'])
+        self.assertEqual(response['refresh'], response_data['data']['refresh'])
 
     def test_auth_token_failure_wrong_user_and_password(self):
         """Test the failure of authentication token generation.

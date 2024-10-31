@@ -1,10 +1,10 @@
 import uuid
 from abc import ABC, abstractmethod
-from typing import Any, Union
+from typing import Any, Union, Optional
 
 from core import cache, response
 from core.model import CoreModelSoftDelete
-from core.schemas import DictId, PageFilter, PageSchema, StandResponse
+from core.schemas import DictId, PageFilter, PageSchema, StandResponse, OptionalDictResponseType
 from django.db.models import Model
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -83,7 +83,7 @@ class GenericCURD(BaseCURD):  # pragma: no cover
 
     def update_obj(
         self, id: int, payload, user_email
-    ) -> StandResponse[Union[DictId, dict]]:
+    ) -> OptionalDictResponseType:
         return model_opertion.update(
             updater=user_email, model=self.model, payload=payload, obj_id=id
         )
@@ -139,10 +139,10 @@ class GenericCURDSoftDelete(BaseCURD):
 
     def update_obj(
         self, id: int, payload: GenericPayload, user_email: str
-    ) -> StandResponse[Union[DictId, dict]]:
+    ) -> OptionalDictResponseType:
         obj = self._get_obj_by_id(id=id)
         if obj is None:
-            return StandResponse[dict](
+            return OptionalDictResponseType(
                 message=f"{id=} not exist", success=False, data={}
             )
         return model_opertion.update_by_obj(
@@ -151,7 +151,7 @@ class GenericCURDSoftDelete(BaseCURD):
 
     def partial_update(
         self, id: int, user_email: str, **fields_kv
-    ) -> StandResponse[Union[DictId, dict]]:
+    ) -> OptionalDictResponseType:
         obj = self._get_obj_by_id(id=id)
         return model_opertion.update_by_obj(updater=user_email, obj=obj, **fields_kv)
 
