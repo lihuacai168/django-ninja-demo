@@ -115,7 +115,10 @@ python -m celery -A apidemo.celery_config beat -l DEBUG
 
 ## Dependency Management
 - Dependencies are managed through `pyproject.toml`
+- Dependencies are locked in `uv.lock` for reproducible builds
 - Use `uv sync` to install dependencies
+- Use `uv sync --locked` to install dependencies with exact versions
+- Use `uv lock` to regenerate the lock file
 - Use `uv sync --upgrade` to upgrade dependencies
 - Use `uv sync --no-dev` for production environments
 
