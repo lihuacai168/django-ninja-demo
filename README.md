@@ -49,12 +49,26 @@ uv sync --no-dev
 
 ### Database Setup
 ```shell
-python manage.py migrate
+uv run python manage.py migrate
 ```
 
 ### Start Development Server
 ```shell
-python manage.py runserver localhost:8000
+# 开发环境启动
+uv run python manage.py runserver localhost:8000
+
+# 或使用 gunicorn 启动（生产环境推荐）
+# 使用 4 个 worker
+uv run gunicorn apidemo.wsgi:application --workers=4 --bind=0.0.0.0:8000
+
+# 使用 gevent worker
+uv run gunicorn apidemo.wsgi:application --worker-class=gevent --workers=4 --bind=0.0.0.0:8000
+
+# 后台运行
+uv run gunicorn apidemo.wsgi:application --daemon --workers=4 --bind=0.0.0.0:8000 --pid=/tmp/gunicorn.pid --access-logfile=/var/log/gunicorn/access.log --error-logfile=/var/log/gunicorn/error.log
+
+# 停止后台运行的 gunicorn
+kill -9 $(cat /tmp/gunicorn.pid)
 ```
 
 ## Docker Deployment
@@ -95,13 +109,13 @@ broker_url = "redis://127.0.0.1:6379/0"
 ## Run Celery Worker
 ```shell
 # Start celery worker
-python -m celery -A apidemo.celery_config worker -l INFO
+uv run celery -A apidemo.celery_config worker -l INFO
 ```
 
 ## Run Celery Beat
 ```shell
 # Start celery beat
-python -m celery -A apidemo.celery_config beat -l DEBUG
+uv run celery -A apidemo.celery_config beat -l DEBUG
 ```
 
 ## IDE Configuration
@@ -122,11 +136,60 @@ python -m celery -A apidemo.celery_config beat -l DEBUG
 - Use `uv sync --upgrade` to upgrade dependencies
 - Use `uv sync --no-dev` for production environments
 
+### Using Mirror Sources
+```shell
+# 使用豆瓣源
+export UV_INDEX_URL=https://pypi.doubanio.com/simple/
+# 或使用清华源
+export UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple/
+# 或使用阿里云源
+export UV_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
+
+# 然后运行 uv 命令
+uv sync  # 安装依赖
+uv pip install package-name  # 安装单个包
+```
+
+对于 Windows PowerShell：
+```powershell
+# 使用豆瓣源
+$env:UV_INDEX_URL = "https://pypi.doubanio.com/simple/"
+# 或使用清华源
+$env:UV_INDEX_URL = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+# 或使用阿里云源
+$env:UV_INDEX_URL = "https://mirrors.aliyun.com/pypi/simple/"
+
+# 然后运行 uv 命令
+uv sync
+```
+
+对于 Windows CMD：
+```cmd
+# 使用豆瓣源
+set UV_INDEX_URL=https://pypi.doubanio.com/simple/
+# 或使用清华源
+set UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple/
+# 或使用阿里云源
+set UV_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
+
+# 然后运行 uv 命令
+uv sync
+```
+
+永久设置（推荐）：
+```shell
+# macOS/Linux: 添加到 ~/.bashrc 或 ~/.zshrc
+echo 'export UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple/' >> ~/.zshrc
+source ~/.zshrc
+
+# Windows: 在系统环境变量中添加 UV_INDEX_URL
+```
+
 ## Testing
 ```shell
 # Run tests with coverage
-coverage run --source='.' manage.py test
+uv run coverage run --source='.' manage.py test
 
 # Generate coverage report
-coverage xml
+uv run coverage xml
 ```
